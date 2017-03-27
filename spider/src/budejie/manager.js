@@ -1,4 +1,5 @@
-const budeji = require('./worker')
+const timer = require('../util/timer')
+const budejie = require('./worker')
 
 
 const getSrc = (() => {
@@ -11,9 +12,12 @@ const getSrc = (() => {
 })()
 
 function getContents() {
-  const uri = getSrc()
-  budeji.budejieDo(uri, (contents) => {
-    console.log(contents)
+  let count = 0
+  timer.everyRound(5000, 10000, () => {
+    const uri = getSrc()
+    budejie.budejieDo(uri, (contents) => {
+      console.log(contents)
+    })
   })
 }
 
