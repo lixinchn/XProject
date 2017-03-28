@@ -12,11 +12,12 @@ const getSrc = (() => {
 })()
 
 function getContents() {
-  let count = 0
   timer.everyRound(5000, 10000, () => {
     const uri = getSrc()
     budejie.budejieDo(uri, (contents) => {
       console.log(contents)
+
+      // TODO
       stopController.stop(contents, '1111')
     })
   })
