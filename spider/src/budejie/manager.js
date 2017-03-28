@@ -17,8 +17,42 @@ function getContents() {
     const uri = getSrc()
     budejie.budejieDo(uri, (contents) => {
       console.log(contents)
+      stopController.stop(contents, '1111')
     })
   })
+}
+
+const stopController = {
+  contentsStopper: (contents) => {
+    // stop when there are no more contents
+    if (!contents) {
+      budejie.stop()
+      return true
+    }
+
+    return false
+  },
+
+  idStopper: (contents, lastId) => {
+    let stop = contents.forEach((content) => {
+      if (content.id === lastId)
+        return true
+    })
+
+    if (stop) {
+      budejie.stop()
+      return true
+    }
+
+    return false
+  },
+
+  stop: (contents, lastId) => {
+    if (stopController.contentsStopper(contents))
+      return
+    if (stopController.idStopper(contents, lastId))
+      return
+  },
 }
 
 exports.do = getContents
