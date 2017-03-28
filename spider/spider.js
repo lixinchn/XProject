@@ -2,7 +2,7 @@ const budejie = require('./src/budejie/manager')
 const neihanshequ = require('./src/neihanshequ/manager')
 
 
-// budejie.getTextContents()
+budejie.getTextContents()
 // budejie.getImageContents()
-budejie.getVideoContents()
+// budejie.getVideoContents()
 // neihanshequ.do()
