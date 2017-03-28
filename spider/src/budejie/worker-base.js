@@ -34,8 +34,18 @@ const getImageSrc = (() => {
   }
 })()
 
+const getVideoSrc = (() => {
+  let page = 1
+  let src = 'http://m.budejie.com/video/'
+
+  return () => {
+    return src + (page++)
+  }
+})()
+
 module.exports = {
   getId: getId,
   getTextSrc: getTextSrc,
   getImageSrc: getImageSrc,
+  getVideoSrc: getVideoSrc,
 }

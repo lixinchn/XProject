@@ -1,6 +1,7 @@
 const timer = require('../util/timer')
 const budejieText = require('./worker-text')
 const budejieImage = require('./worker-image')
+const budejieVideo = require('./worker-video')
 const workerBase = require('./worker-base')
 const conf = require('../conf')
 
@@ -28,6 +29,19 @@ function getImageContents() {
     })
   })
 }
+
+function getVideoContents() {
+  timer.everyRound(conf.floorTime, conf.ceilTime, () => {
+    const uri = workerBase.getVideoSrc()
+    budejieVideo.begin(uri, (contents) => {
+      console.log(contents)
+
+      // TODO
+      stopController.stop(contents, '1111')
+    })
+  })
+}
+
 
 const stopController = {
   contentsStopper: (contents) => {
@@ -65,5 +79,6 @@ const stopController = {
 module.exports = {
   getTextContents: getTextContents,
   getImageContents: getImageContents,
+  getVideoContents: getVideoContents,
 }
 
