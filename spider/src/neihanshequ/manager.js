@@ -1,5 +1,6 @@
 const timer = require('../util/timer')
 const neihanshequ = require('./worker')
+const conf = require('../conf')
 
 
 const getSrc = (() => {
@@ -11,7 +12,7 @@ const getSrc = (() => {
 })()
 
 function getContents() {
-  timer.everyRound(5000, 10000, () => {
+  timer.everyRound(conf.floorTime, conf.ceilTime, () => {
     const uri = getSrc()
     neihanshequ.neihanshequDo(uri, (contents) => {
       console.log(contents)

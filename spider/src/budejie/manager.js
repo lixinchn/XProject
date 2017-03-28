@@ -1,20 +1,26 @@
 const timer = require('../util/timer')
-const budejie = require('./worker')
+const budejieText = require('./worker-text')
+const budejieImage = require('./worker-image')
+const workerBase = require('./worker-base')
+const conf = require('../conf')
 
 
-const getSrc = (() => {
-  let page = 1
-  let src = 'http://www.budejie.com/text/'
+function getTextContents() {
+  timer.everyRound(conf.floorTime, conf.ceilTime, () => {
+    const uri = workerBase.getTextSrc()
+    budejieText.begin(uri, (contents) => {
+      console.log(contents)
 
-  return () => {
-    return src + (page++)
-  }
-})()
+      // TODO
+      stopController.stop(contents, '1111')
+    })
+  })
+}
 
-function getContents() {
-  timer.everyRound(5000, 10000, () => {
-    const uri = getSrc()
-    budejie.budejieDo(uri, (contents) => {
+function getImageContents() {
+  timer.everyRound(conf.floorTime, conf.ceilTime, () => {
+    const uri = workerBase.getImageSrc()
+    budejieImage.begin(uri, (contents) => {
       console.log(contents)
 
       // TODO
@@ -27,7 +33,7 @@ const stopController = {
   contentsStopper: (contents) => {
     // stop when there are no more contents
     if (!contents) {
-      budejie.stop()
+      budejieText.stop()
       return true
     }
 
@@ -41,7 +47,7 @@ const stopController = {
     })
 
     if (stop) {
-      budejie.stop()
+      budejieText.stop()
       return true
     }
 
@@ -56,5 +62,8 @@ const stopController = {
   },
 }
 
-exports.do = getContents
+module.exports = {
+  getTextContents: getTextContents,
+  getImageContents: getImageContents,
+}
 
