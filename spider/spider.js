@@ -3,6 +3,7 @@ const neihanshequ = require('./src/neihanshequ/manager')
 
 
 // budejie.getTextContents()
-budejie.getImageContents()
+// budejie.getImageContents()
 // budejie.getVideoContents()
-// neihanshequ.do()
+// neihanshequ.getTextContents()
+neihanshequ.getImageContents()

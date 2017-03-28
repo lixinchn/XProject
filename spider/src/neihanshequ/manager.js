@@ -1,20 +1,25 @@
 const timer = require('../util/timer')
-const neihanshequ = require('./worker')
 const conf = require('../conf')
+const neihanshequText = require('./worker-text')
+const neihanshequImage = require('./worker-image')
+const workerBase = require('./worker-base')
 
 
-const getSrc = (() => {
-  let src = 'http://neihanshequ.com/'
-
-  return () => {
-    return src
-  }
-})()
-
-function getContents() {
+function getTextContents() {
   timer.everyRound(conf.floorTime, conf.ceilTime, () => {
-    const uri = getSrc()
-    neihanshequ.neihanshequDo(uri, (contents) => {
+    const uri = workerBase.getTextSrc()
+    neihanshequText.begin(uri, (contents) => {
+      console.log(contents)
+
+      // TODO: stop when there are no more to insert into DB
+    })
+  })
+}
+
+function getImageContents() {
+  timer.everyRound(conf.floorTime, conf.ceilTime, () => {
+    const uri = workerBase.getImageSrc()
+    neihanshequImage.begin(uri, (contents) => {
       console.log(contents)
 
       // TODO: stop when there are no more to insert into DB
@@ -25,5 +30,8 @@ function getContents() {
 const stopController = {
 }
 
-exports.do = getContents
+module.exports = {
+  getTextContents: getTextContents,
+  getImageContents: getImageContents,
+}
 

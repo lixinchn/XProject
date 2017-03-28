@@ -43,4 +43,4 @@ function begin(uri, callback) {
     })
 }
 
-exports.neihanshequDo = begin
+exports.begin = begin

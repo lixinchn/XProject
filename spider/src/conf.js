@@ -1,6 +1,6 @@
 const conf = {
-  floorTime: 2000,
-  ceilTime: 5000,
+  floorTime: 1000,
+  ceilTime: 3000,
 }
 
 module.exports = conf
