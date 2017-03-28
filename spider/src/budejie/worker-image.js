@@ -31,11 +31,17 @@ function begin(uri, callback) {
         let id = workerBase.getId(href)
         let content = getContent($, elem)
         let imageSrc = getImageSrc($, elem)
+        let time = workerBase.getTime($, elem)
+        let up = workerBase.getUp($, elem)
+        let down = workerBase.getDown($, elem)
         contents.push({
           href: href,
           id: id,
           content: content,
           imageSrc: imageSrc,
+          time: time,
+          up: up,
+          down: down,
         })
       })
 

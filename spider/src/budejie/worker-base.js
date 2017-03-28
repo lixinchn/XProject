@@ -15,6 +15,17 @@ function getId(href) {
   return id
 }
 
+function getTime($) {
+  return $('.j-list-user').find('.u-time').html()
+}
+
+function getUp($) {
+  return parseInt($('.j-r-list-tool').find('.j-r-list-tool-l-up').find('span').html())
+}
+
+function getDown($) {
+  return parseInt($('.j-r-list-tool').find('.j-r-list-tool-l-down').find('span').html())
+}
 
 const getTextSrc = (() => {
   let page = 1
@@ -48,4 +59,7 @@ module.exports = {
   getTextSrc: getTextSrc,
   getImageSrc: getImageSrc,
   getVideoSrc: getVideoSrc,
+  getTime: getTime,
+  getUp: getUp,
+  getDown: getDown,
 }

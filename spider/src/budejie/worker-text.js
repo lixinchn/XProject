@@ -17,18 +17,6 @@ function getContent($, elem) {
   return $(elem).find('a').html()
 }
 
-function getTime($) {
-  return $('.j-list-user').find('.u-time').html()
-}
-
-function getUp($) {
-  return parseInt($('.j-r-list-tool').find('.j-r-list-tool-l-up').find('span').html())
-}
-
-function getDown($) {
-  return parseInt($('.j-r-list-tool').find('.j-r-list-tool-l-down').find('span').html())
-}
-
 function begin(uri, callback) {
   options.uri = uri
   rp(options)
@@ -38,9 +26,9 @@ function begin(uri, callback) {
         let href = getHref($, elem)
         let id = workerBase.getId(href)
         let content = getContent($, elem)
-        let time = getTime($, elem)
-        let up = getUp($, elem)
-        let down = getDown($, elem)
+        let time = workerBase.getTime($, elem)
+        let up = workerBase.getUp($, elem)
+        let down = workerBase.getDown($, elem)
         contents.push({
           href: href,
           id: id,
