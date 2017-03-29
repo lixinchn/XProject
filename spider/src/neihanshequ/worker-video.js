@@ -10,7 +10,7 @@ const options = {
   headers: {
     'User-Agent': conf.ua,
     'Host': conf.neihanshequ.host,
-    'Referer': conf.neihanshequ.refererImage,
+    'Referer': conf.neihanshequ.refererVideo,
     'Upgrade-Insecure-Requests': '1',
   },
   resolveWithFullResponse: true,
@@ -25,25 +25,35 @@ function begin(uri, callback) {
 
       // get contents
       let contents = []
-      let minTime = response.body.data.min_time
+      let maxTime = response.body.data.max_time
       response.body.data.data.forEach(data => {
         let group = data.group
         let content = group.content
         let id = group.id
         let up = parseInt(group.digg_count)
         let down = parseInt(group.bury_count)
-        let onlineTime = data.online_time
+        let onlineTime = group.online_time
         let time = moment(onlineTime * 1000).format('YYYY-MM-DD HH:mm:ss')
+        let largeCover = group.large_cover.url_list[0].url
+        let mediumCover = group.medium_cover.url_list[0].url
+        let video360pUrl = group['360p_video'].url_list[0].url
+        let video480pUrl = group['480p_video'].url_list[0].url
+        let video720pUrl = group['720p_video'].url_list[0].url
         contents.push({
           id: id,
           content: content,
           up: up,
           down: down,
           time: time,
+          largeCover: largeCover,
+          mediumCover: mediumCover,
+          video360pUrl: video360pUrl,
+          video480pUrl: video480pUrl,
+          video720pUrl: video720pUrl,
         })
       })
 
-      callback(minTime, contents)
+      callback(maxTime, contents)
     })
     .catch(err => {
       console.log(err)
