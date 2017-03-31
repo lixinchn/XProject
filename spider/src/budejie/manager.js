@@ -2,13 +2,12 @@ const timer = require('../util/timer')
 const budejieText = require('./worker-text')
 const budejieImage = require('./worker-image')
 const budejieVideo = require('./worker-video')
-const workerBase = require('./worker-base')
 const conf = require('../conf')
 
 
 function getTextContents() {
   timer.everyRound(conf.floorTime, conf.ceilTime, () => {
-    const uri = workerBase.getTextSrc()
+    const uri = budejieText.getSrc()
     budejieText.begin(uri, (contents) => {
       console.log(contents)
 
@@ -20,7 +19,7 @@ function getTextContents() {
 
 function getImageContents() {
   timer.everyRound(conf.floorTime, conf.ceilTime, () => {
-    const uri = workerBase.getImageSrc()
+    const uri = budejieImage.getSrc()
     budejieImage.begin(uri, (contents) => {
       console.log(contents)
 
@@ -32,7 +31,7 @@ function getImageContents() {
 
 function getVideoContents() {
   timer.everyRound(conf.floorTime, conf.ceilTime, () => {
-    const uri = workerBase.getVideoSrc()
+    const uri = budejieVideo.getSrc()
     budejieVideo.begin(uri, (contents) => {
       console.log(contents)
 

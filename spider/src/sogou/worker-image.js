@@ -22,22 +22,20 @@ function begin(uri, callback) {
       let contents = []
       let lastIndex = response.body.lastindex
       response.body.url_infos.forEach(data => {
-        let content = data.content
-        let up = data.good_count
+        let content = data.title
 
         let imageList = []
         data.images.forEach(image => {
-          imageList.push(image.image)
+          imageList.push(image.name)
         })
 
-        let id = data.index
+        let id = data.sourceid
         let onlineTime = data.publish_time
         let time = moment(onlineTime * 1000).format('YYYY-MM-DD HH:mm:ss')
 
         contents.push({
           id: id,
           content: content,
-          up: up,
           time: time,
           imageList: imageList,
         })
@@ -50,4 +48,8 @@ function begin(uri, callback) {
     })
 }
 
-exports.begin = begin
+module.exports = {
+  begin: begin,
+  getSrc: workerBase.getImageSrc,
+  setLastIndex: workerBase.setImageLastIndex,
+}

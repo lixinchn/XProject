@@ -50,4 +50,8 @@ function begin(uri, callback) {
     })
 }
 
-exports.begin = begin
+module.exports = {
+  begin: begin,
+  getSrc: workerBase.getTextSrc,
+  setMaxTime: workerBase.setTextMinTime,
+}

@@ -8,9 +8,9 @@ const workerBase = require('./worker-base')
 
 function getTextContents() {
   timer.everyRound(conf.floorTime, conf.ceilTime, () => {
-    const uri = workerBase.getTextSrc()
+    const uri = neihanshequText.getSrc()
     neihanshequText.begin(uri, (minTime, contents) => {
-      workerBase.setTextMinTime(minTime)
+      neihanshequText.setMaxTime(minTime)
       console.log(contents)
 
       // TODO: stop when there are no more to insert into DB
@@ -20,9 +20,9 @@ function getTextContents() {
 
 function getImageContents() {
   timer.everyRound(conf.floorTime, conf.ceilTime, () => {
-    const uri = workerBase.getImageSrc()
+    const uri = neihanshequImage.getSrc()
     neihanshequImage.begin(uri, (maxTime, contents) => {
-      workerBase.setImageMaxTime(maxTime)
+      neihanshequImage.setMaxTime(maxTime)
       console.log(contents)
 
       // TODO: stop when there are no more to insert into DB
@@ -32,9 +32,9 @@ function getImageContents() {
 
 function getVideoContents() {
   timer.everyRound(conf.floorTime, conf.ceilTime, () => {
-    const uri = workerBase.getVideoSrc()
+    const uri = neihanshequVideo.getSrc()
     neihanshequVideo.begin(uri, (maxTime, contents) => {
-      workerBase.setVideoMaxTime(maxTime)
+      neihanshequVideo.setMaxTime(maxTime)
       console.log(contents)
 
       // TODO: stop when there are no more to insert into DB

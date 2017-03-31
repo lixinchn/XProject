@@ -1,5 +1,6 @@
 const rp = require('request-promise')
 const cheerio = require('cheerio')
+const workerBase = require('./worker-base')
 const options = {
   transform: body => {
     return cheerio.load(body, {
@@ -9,7 +10,10 @@ const options = {
 }
 
 function getContent($, elem) {
-  return $(elem).find('.ui-row-flex').find('p').html()
+  let content = $(elem).find('section.ui-row-flex').find('p').html()
+  content = content.trim('\n')
+  content = content.trim()
+  return content
 }
 
 function getId($, elem) {
@@ -42,8 +46,10 @@ function begin(uri, callback) {
     .then($ => {
       let contents = []
       $('.ui-border-b').each((index, elem) => {
-        let content = getContent($, elem)
         let id = getId($, elem)
+        if (!id)
+          return // ad
+        let content = getContent($, elem)
         let imageSrc = getImageSrc($, elem)
         let videoSrc = getVideoSrc($, elem)
         let time = getTime($, elem)
@@ -67,4 +73,7 @@ function begin(uri, callback) {
     })
 }
 
-exports.begin = begin
+module.exports = {
+  begin: begin,
+  getSrc: workerBase.getVideoSrc,
+}

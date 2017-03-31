@@ -51,7 +51,7 @@ const gifSrc = (() => {
 
   return {
     getGifSrc: () => {
-      let newParams = { b: 'GIF'}
+      let newParams = { b: 'GIF' }
       let realSrc = src + getParams(newParams)
       return !gifSrc.lastIndex ? realSrc : realSrc + '&lastindex=' + gifSrc.lastIndex
     },
@@ -68,7 +68,7 @@ const videoSrc = (() => {
 
   return {
     getVideoSrc: () => {
-      let newParams = { b: '%E5%A4%A7%E5%9B%BE%E8%A7%86%E9%A2%91'}
+      let newParams = { b: '%E5%A4%A7%E5%9B%BE%E8%A7%86%E9%A2%91' }
       let realSrc = src + getParams(newParams)
       return !videoSrc.lastIndex ? realSrc : realSrc + '&lastindex=' + videoSrc.lastIndex
     },

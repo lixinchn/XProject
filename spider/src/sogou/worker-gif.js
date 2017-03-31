@@ -50,4 +50,10 @@ function begin(uri, callback) {
     })
 }
 
-exports.begin = begin
+
+module.exports = {
+  begin: begin,
+  getSrc: workerBase.getGifSrc,
+  setLastIndex: workerBase.setGifLastIndex,
+}
+

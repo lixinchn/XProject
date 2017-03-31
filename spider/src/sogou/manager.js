@@ -3,14 +3,13 @@ const conf = require('../conf')
 const sogouImage = require('./worker-image')
 const sogouGif = require('./worker-gif')
 const sogouVideo = require('./worker-video')
-const workerBase = require('./worker-base')
 
 
 function getImageContents() {
   timer.everyRound(conf.floorTime, conf.ceilTime, () => {
-    const uri = workerBase.getImageSrc()
+    const uri = sogouImage.getSrc()
     sogouImage.begin(uri, (lastIndex, contents) => {
-      workerBase.setImageLastIndex(lastIndex)
+      sogouImage.setLastIndex(lastIndex)
       console.log(contents)
 
       // TODO: stop when there are no more to insert into DB
@@ -20,9 +19,9 @@ function getImageContents() {
 
 function getGifContents() {
   timer.everyRound(conf.floorTime, conf.ceilTime, () => {
-    const uri = workerBase.getGifSrc()
+    const uri = sogouGif.getSrc()
     sogouGif.begin(uri, (lastIndex, contents) => {
-      workerBase.setGifLastIndex(lastIndex)
+      sogouGif.setLastIndex(lastIndex)
       console.log(contents)
 
       // TODO: stop when there are no more to insert into DB
@@ -32,9 +31,9 @@ function getGifContents() {
 
 function getVideoContents() {
   timer.everyRound(conf.floorTime, conf.ceilTime, () => {
-    const uri = workerBase.getVideoSrc()
+    const uri = sogouVideo.getSrc()
     sogouVideo.begin(uri, (lastIndex, contents) => {
-      workerBase.setVideoLastIndex(lastIndex)
+      sogouVideo.setLastIndex(lastIndex)
       console.log(contents)
 
       // TODO: stop when there are no more to insert into DB
