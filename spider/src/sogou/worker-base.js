@@ -62,10 +62,28 @@ const gifSrc = (() => {
   }
 })()
 
+const videoSrc = (() => {
+  let src = 'https://shida.epro.sogou.com/discover_agent/getlist?'
+  let lastIndex = 0
+
+  return {
+    getVideoSrc: () => {
+      let newParams = { b: '%E5%A4%A7%E5%9B%BE%E8%A7%86%E9%A2%91'}
+      let realSrc = src + getParams(newParams)
+      return !videoSrc.lastIndex ? realSrc : realSrc + '&lastindex=' + videoSrc.lastIndex
+    },
+
+    setVideoLastIndex: lastIndex => {
+      videoSrc.lastIndex = lastIndex
+    }
+  }
+})()
 
 module.exports = {
   getImageSrc: imgSrc.getImageSrc,
   setImageLastIndex: imgSrc.setLastIndex,
   getGifSrc: gifSrc.getGifSrc,
   setGifLastIndex: gifSrc.setLastIndex,
+  getVideoSrc: videoSrc.getVideoSrc,
+  setVideoLastIndex: videoSrc.setVideoLastIndex,
 }

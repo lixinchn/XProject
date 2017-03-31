@@ -2,6 +2,7 @@ const timer = require('../util/timer')
 const conf = require('../conf')
 const sogouImage = require('./worker-image')
 const sogouGif = require('./worker-gif')
+const sogouVideo = require('./worker-video')
 const workerBase = require('./worker-base')
 
 
@@ -29,11 +30,24 @@ function getGifContents() {
   })
 }
 
+function getVideoContents() {
+  timer.everyRound(conf.floorTime, conf.ceilTime, () => {
+    const uri = workerBase.getVideoSrc()
+    sogouVideo.begin(uri, (lastIndex, contents) => {
+      workerBase.setVideoLastIndex(lastIndex)
+      console.log(contents)
+
+      // TODO: stop when there are no more to insert into DB
+    })
+  })
+}
+
 const stopController = {
 }
 
 module.exports = {
   getImageContents: getImageContents,
   getGifContents: getGifContents,
+  getVideoContents: getVideoContents,
 }
 
