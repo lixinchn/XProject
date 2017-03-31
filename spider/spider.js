@@ -1,5 +1,6 @@
 const budejie = require('./src/budejie/manager')
 const neihanshequ = require('./src/neihanshequ/manager')
+const sogou = require('./src/sogou/manager')
 
 
 // budejie.getTextContents()
@@ -7,4 +8,5 @@ const neihanshequ = require('./src/neihanshequ/manager')
 // budejie.getVideoContents()
 // neihanshequ.getTextContents()
 // neihanshequ.getImageContents()
-neihanshequ.getVideoContents()
+// neihanshequ.getVideoContents()
+sogou.getImageContents()

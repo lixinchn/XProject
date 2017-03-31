@@ -7,7 +7,12 @@ const conf = {
     host: 'm.neihanshequ.com',
     refererImage: 'http://m.neihanshequ.com/pic/',
     refererVideo: 'http://m.neihanshequ.com/video/',
-  }
+  },
+
+  sogou: {
+    host: 'shida.epro.sogou.com',
+    ua: 'RecNews/1.6.3 (iPhone; iOS 10.2.1; Scale/3.00)',
+  },
 }
 
 module.exports = conf
