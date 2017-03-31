@@ -39,6 +39,7 @@ function begin(uri, callback) {
         let video360pUrl = group['360p_video'].url_list[0].url
         let video480pUrl = group['480p_video'].url_list[0].url
         let video720pUrl = group['720p_video'].url_list[0].url
+        let videoTime = moment.utc(moment.duration(group.duration, 's').asMilliseconds()).format(group.duration > 3600 ? 'HH:mm:ss' : 'mm:ss')
         contents.push({
           id: id,
           content: content,
@@ -50,6 +51,7 @@ function begin(uri, callback) {
           video360pUrl: video360pUrl,
           video480pUrl: video480pUrl,
           video720pUrl: video720pUrl,
+          videoTime: videoTime,
         })
       })
 
