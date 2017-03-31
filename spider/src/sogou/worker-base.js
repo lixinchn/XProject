@@ -1,3 +1,5 @@
+const url = require('../util/url')
+
 const requestParams = {
   api: 5,
   appid: 7747,
@@ -19,15 +21,6 @@ const requestParams = {
   v: '1.6.3',
 }
 
-function getParams(newParams = []) {
-  let params = []
-  let allParams = Object.assign({}, requestParams, newParams)
-  Object.keys(allParams).forEach(key => {
-    params.push(key + '=' + allParams[key])
-  })
-
-  return params.join('&')
-}
 
 const imgSrc = (() => {
   let src = 'https://shida.epro.sogou.com/discover_agent/getlist?'
@@ -35,7 +28,7 @@ const imgSrc = (() => {
 
   return {
     getImageSrc: () => {
-      let realSrc = src + getParams()
+      let realSrc = src + url.joinParams(requestParams)
       return !imgSrc.lastIndex ? realSrc : realSrc + '&lastindex=' + imgSrc.lastIndex
     },
 
@@ -52,7 +45,7 @@ const gifSrc = (() => {
   return {
     getGifSrc: () => {
       let newParams = { b: 'GIF' }
-      let realSrc = src + getParams(newParams)
+      let realSrc = src + url.joinParams(Object.assign({}, requestParams, newParams))
       return !gifSrc.lastIndex ? realSrc : realSrc + '&lastindex=' + gifSrc.lastIndex
     },
 
@@ -69,7 +62,7 @@ const videoSrc = (() => {
   return {
     getVideoSrc: () => {
       let newParams = { b: '%E5%A4%A7%E5%9B%BE%E8%A7%86%E9%A2%91' }
-      let realSrc = src + getParams(newParams)
+      let realSrc = src + url.joinParams(Object.assign({}, requestParams, newParams))
       return !videoSrc.lastIndex ? realSrc : realSrc + '&lastindex=' + videoSrc.lastIndex
     },
 
