@@ -34,11 +34,18 @@ function begin(uri, callback) {
         let down = parseInt(group.bury_count)
         let onlineTime = group.online_time
         let time = moment(onlineTime * 1000).format('YYYY-MM-DD HH:mm:ss')
+
+        // image
         let largeCover = group.large_cover.url_list[0].url
         let mediumCover = group.medium_cover.url_list[0].url
+        let imageSrc = largeCover || mediumCover
+
+        // video
         let video360pUrl = group['360p_video'].url_list[0].url
         let video480pUrl = group['480p_video'].url_list[0].url
         let video720pUrl = group['720p_video'].url_list[0].url
+        let videoSrc = video720pUrl || video480pUrl || video360pUrl
+
         let videoTime = moment.utc(moment.duration(group.duration, 's').asMilliseconds()).format(group.duration > 3600 ? 'HH:mm:ss' : 'mm:ss')
         contents.push({
           id: id,
@@ -46,11 +53,13 @@ function begin(uri, callback) {
           up: up,
           down: down,
           time: time,
-          largeCover: largeCover,
-          mediumCover: mediumCover,
-          video360pUrl: video360pUrl,
-          video480pUrl: video480pUrl,
-          video720pUrl: video720pUrl,
+          imageSrc: imageSrc,
+          videoSrc: videoSrc,
+          // largeCover: largeCover,
+          // mediumCover: mediumCover,
+          // video360pUrl: video360pUrl,
+          // video480pUrl: video480pUrl,
+          // video720pUrl: video720pUrl,
           videoTime: videoTime,
         })
       })

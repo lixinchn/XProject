@@ -33,15 +33,16 @@ function begin(uri, callback) {
         let onlineTime = data.publish_time
         let time = moment(onlineTime * 1000).format('YYYY-MM-DD HH:mm:ss')
         let videoTime = data.video_time
-        let videoUrl = data.url
+        let videoSrc = data.url
 
         contents.push({
           id: id,
           content: content,
           time: time,
           imageList: imageList,
+          imageSrc: imageList && imageList[0],
           videoTime: videoTime,
-          videoUrl: videoUrl,
+          videoSrc: videoSrc,
         })
       })
 
