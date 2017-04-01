@@ -13,6 +13,10 @@ const conf = {
     host: 'shida.epro.sogou.com',
     ua: 'RecNews/1.6.3 (iPhone; iOS 10.2.1; Scale/3.00)',
   },
+
+  kuaikanshipin: {
+    host: 'api.winapp111.com',
+  }
 }
 
 module.exports = conf
