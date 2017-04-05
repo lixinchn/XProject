@@ -13,13 +13,18 @@ function paramErrorHandler(params, res) {
   })
 
   if (error) {
-    response.response(errorInfo.errorParam.code, errorInfo.errorParam.info, res)
+    paramErrorResponse(res)
     return true
   }
 
   return false
 }
 
+function paramErrorResponse(res) {
+  response.response(errorInfo.errorParam.code, errorInfo.errorParam.info, res)
+}
+
 module.exports = {
   paramErrorHandler: paramErrorHandler,
+  paramErrorResponse: paramErrorResponse,
 }
