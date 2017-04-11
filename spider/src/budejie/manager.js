@@ -1,18 +1,21 @@
 const timer = require('../util/timer')
+const conf = require('../conf')
+const db = require('../db')
 const budejieText = require('./worker-text')
 const budejieImage = require('./worker-image')
 const budejieVideo = require('./worker-video')
-const conf = require('../conf')
 
 
 function getTextContents() {
   timer.everyRound(conf.floorTime, conf.ceilTime, () => {
     const uri = budejieText.getSrc()
     budejieText.begin(uri, (contents) => {
-      console.log(contents)
-
-      // TODO
-      stopController.stop(contents, '1111')
+    budejieText.saveContent(contents).then(errorCount => {
+      if (errorCount > 1) {
+        timer.stop()
+        db.endPool()
+      }
+    })
     })
   })
 }
@@ -42,38 +45,38 @@ function getVideoContents() {
 }
 
 
-const stopController = {
-  contentsStopper: (contents) => {
-    // stop when there are no more contents
-    if (!contents) {
-      budejieText.stop()
-      return true
-    }
+// const stopController = {
+//   contentsStopper: (contents) => {
+//     // stop when there are no more contents
+//     if (!contents) {
+//       budejieText.stop()
+//       return true
+//     }
 
-    return false
-  },
+//     return false
+//   },
 
-  idStopper: (contents, lastId) => {
-    let stop = contents.forEach((content) => {
-      if (content.id === lastId)
-        return true
-    })
+//   idStopper: (contents, lastId) => {
+//     let stop = contents.forEach((content) => {
+//       if (content.id === lastId)
+//         return true
+//     })
 
-    if (stop) {
-      budejieText.stop()
-      return true
-    }
+//     if (stop) {
+//       budejieText.stop()
+//       return true
+//     }
 
-    return false
-  },
+//     return false
+//   },
 
-  stop: (contents, lastId) => {
-    if (stopController.contentsStopper(contents))
-      return
-    if (stopController.idStopper(contents, lastId))
-      return
-  },
-}
+//   stop: (contents, lastId) => {
+//     if (stopController.contentsStopper(contents))
+//       return
+//     if (stopController.idStopper(contents, lastId))
+//       return
+//   },
+// }
 
 module.exports = {
   getTextContents: getTextContents,

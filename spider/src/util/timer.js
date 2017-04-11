@@ -8,9 +8,10 @@ function everyRound(floorTime, ceilTime, func) {
 
   let interval = Math.ceil((Math.random() * (ceilTime - floorTime)) + floorTime)
   let intervalId = setTimeout(() => {
-    func()
-    if (!isStop)
-      everyRound(floorTime, ceilTime, func)
+    if (!isStop) {
+      func()
+      everyRound(floorTime, ceilTime, func)  
+    }
   }, interval)
   return intervalId
 }

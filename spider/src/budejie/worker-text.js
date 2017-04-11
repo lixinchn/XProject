@@ -1,5 +1,7 @@
 const rp = require('request-promise')
 const cheerio = require('cheerio')
+const db = require('../db')
+const conf = require('../conf')
 const workerBase = require('./worker-base')
 const options = {
   transform: body => {
@@ -46,7 +48,51 @@ function begin(uri, callback) {
     })
 }
 
+const saveContent = async (contents) => {
+  let pool = db.getPool()
+  let errorCount = 0
+
+  for (let content of contents) {
+    let params = makeParams(content)
+    try {
+      let results = await insert(pool, params)
+      console.log(results)
+    } catch(e) {
+      // console.log(e)
+      ++errorCount
+    }
+  }
+  return errorCount
+}
+
+const insert = (pool, params) => {
+  return new Promise((resolve, reject) => {
+    pool.query('INSERT INTO x_t_joke(source, original_id, text_content, original_date, \
+      up, down, original_page, type) VALUES(?, ?, ?, ?, ?, ?, ?, ?);', params,
+      (error, results, fields) => {
+        if (error)
+          reject(error)
+        resolve(results)
+      })  
+  })
+}
+
+function makeParams(content) {
+  let params = [
+    conf.budejie.name,
+    conf.budejie.name + '_' + content.id,
+    content.content,
+    content.time,
+    content.up,
+    content.down,
+    conf.budejie.originalUrlPrefix + content.href,
+    conf.contentType.content,
+  ]
+  return params
+}
+
 module.exports = {
   begin: begin,
-  getSrc: workerBase.getImageSrc,
+  getSrc: workerBase.getTextSrc,
+  saveContent: saveContent,
 }
