@@ -1,4 +1,4 @@
-const timer = require('../util/timer')
+const Timer = require('../util/timer')
 const conf = require('../conf')
 const db = require('../db')
 const budejieText = require('./worker-text')
@@ -7,17 +7,20 @@ const budejieVideo = require('./worker-video')
 
 
 function getTextContents() {
-  timer.everyRound(conf.floorTime, conf.ceilTime, () => {
+  const timer = new Timer.Timer(conf.floorTime, conf.ceilTime, () => {
     const uri = budejieText.getSrc()
     budejieText.begin(uri, (contents) => {
-    budejieText.saveContent(contents).then(errorCount => {
-      if (errorCount > 1) {
-        timer.stop()
-        db.endPool()
-      }
-    })
+      budejieText.saveContent(contents).then(errorCount => {
+        timer.makeIdle() // 一次抓取和存储结束，释放 timer
+        console.log(errorCount)
+        if (errorCount > 1) {
+          timer.stop() // 大部分情况下是因为重复的内容过多，所以结束 timer
+          db.endPool()
+        }
+      })
     })
   })
+  timer.everyRound()
 }
 
 function getImageContents() {
