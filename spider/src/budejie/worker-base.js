@@ -1,9 +1,11 @@
 'use strict'
+const spiderBase = require('../base/spider-base')
 
 
-class WorkerBase {
-  constructor() {
-    this.page = 1
+class WorkerBase extends spiderBase.SpiderBase {
+  constructor(page) {
+    super()
+    this.page = page
   }
 
   getId(href) {
@@ -35,15 +37,11 @@ class WorkerBase {
     return parseInt($('.j-r-list-tool').find('.j-r-list-tool-l-down').find('span').html())
   }
 
-  /*
-  const getImageSrc = (() => {
-    let page = 1
-    let src = 'http://www.budejie.com/pic/'
+  getSrc() {
+    return this.src + this.page
+  }
 
-    return () => {
-      return src + (page++)
-    }
-  })()
+  /*
 
   const getVideoSrc = (() => {
     let page = 1
@@ -56,15 +54,4 @@ class WorkerBase {
   */
 }
 
-/*
-module.exports = {
-  getId: getId,
-  getTextSrc: getTextSrc,
-  getImageSrc: getImageSrc,
-  getVideoSrc: getVideoSrc,
-  getTime: getTime,
-  getUp: getUp,
-  getDown: getDown,
-}
-*/
 exports.WorkerBase = WorkerBase

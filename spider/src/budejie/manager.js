@@ -12,15 +12,24 @@ class Manager {
   }
 
   getTextContents() {
+    this.getContents(budejieText)
+  }
+
+  getImageContents() {
+    this.getContents(budejieImage)
+  }
+
+  getContents(workerNamespace) {
+    let page = 1
     const timer = new Timer.Timer(conf.floorTime, conf.ceilTime, () => {
-      const worker = new budejieText.Worker()
+      const worker = new workerNamespace.Worker(page++)
       worker.begin(worker.getSrc(), (contents) => {
         worker.saveContent(contents).then(errorCount => {
           timer.makeIdle() // 一次抓取和存储结束，释放 timer
-          console.log(errorCount)
+          // console.log(errorCount)
           if (errorCount > 1) {
             timer.stop() // 大部分情况下是因为重复的内容过多，所以结束 timer
-            db.endPool()
+            db.endPool() // 必须执行这一句 node 环境才会退出
           }
         })
       })
@@ -29,17 +38,6 @@ class Manager {
   }
 
   /*
-  getImageContents() {
-    timer.everyRound(conf.floorTime, conf.ceilTime, () => {
-      const uri = budejieImage.getSrc()
-      budejieImage.begin(uri, (contents) => {
-        console.log(contents)
-
-        // TODO
-        stopController.stop(contents, '1111')
-      })
-    })
-  }
 
   getVideoContents() {
     timer.everyRound(conf.floorTime, conf.ceilTime, () => {

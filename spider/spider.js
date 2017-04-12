@@ -5,7 +5,9 @@ const kuaikanshipin = require('./src/kuaikanshipin/manager')
 
 
 budejieManager = new budejie.Manager()
-budejieManager.getTextContents()
+// budejieManager.getTextContents()
+budejieManager.getImageContents()
+
 // budejie.getImageContents()
 // budejie.getVideoContents()
 // neihanshequ.getTextContents()
