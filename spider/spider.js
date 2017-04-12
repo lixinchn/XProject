@@ -4,10 +4,13 @@ const sogou = require('./src/sogou/manager')
 const kuaikanshipin = require('./src/kuaikanshipin/manager')
 
 
-budejieManager = new budejie.Manager()
-budejieManager.getTextContents()
+// budejieManager = new budejie.Manager()
+// budejieManager.getTextContents()
 // budejieManager.getImageContents()
 // budejieManager.getVideoContents()
+
+neihanshequManager = new neihanshequ.Manager()
+neihanshequManager.getTextContents()
 
 // budejie.getImageContents()
 // budejie.getVideoContents()

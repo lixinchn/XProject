@@ -2,11 +2,14 @@
 const rp = require('request-promise')
 const cheerio = require('cheerio')
 const spiderBase = require('../base/spider-base')
+const conf = require('../conf')
 
 
 class WorkerBase extends spiderBase.SpiderBase {
   constructor(page) {
     super()
+    this.originalUrlPrefix = conf.budejie.originalUrlPrefix
+    this.name = conf.budejie.name
     this.page = page
     this.options = {
       transform: body => {
@@ -51,7 +54,7 @@ class WorkerBase extends spiderBase.SpiderBase {
   }
 
   beginCapture(options, onFinish, onError) {
-    rp(this.options).then(onFinish).catch(onError)
+    rp(options).then(onFinish).catch(onError)
   }
 }
 

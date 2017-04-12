@@ -19,6 +19,7 @@ const conf = {
 
   neihanshequ: {
     name: 'neihanshequ',
+    originalUrlPrefix: 'http://m.neihanshequ.com',
     host: 'm.neihanshequ.com',
     refererImage: 'http://m.neihanshequ.com/pic/',
     refererVideo: 'http://m.neihanshequ.com/video/',

@@ -1,6 +1,5 @@
 'use strict'
 const db = require('../db')
-const conf = require('../conf')
 
 
 class SpiderBase {
@@ -29,10 +28,14 @@ class SpiderBase {
     return new Promise((resolve, reject) => {
       pool.query('SELECT id FROM x_t_joke WHERE original_id = ?;', originalId,
         (error, results, fields) => {
-          if (error)
+          if (error) {
             reject(error)
-          if (results.length > 0) // 说明抓取的是重复的内容，直接返回
+            return
+          }
+          if (results.length > 0) { // 说明抓取的是重复的内容，直接返回
             reject('重复的内容, src: ' + src + ', originalId: ' + originalId)
+            return
+          }
 
           pool.query('INSERT INTO x_t_joke(source, original_id, text_content, image_src, \
           original_date, up, down, original_page, type, ctime) VALUES(?, ?, ?, ?, ?, \
@@ -48,21 +51,21 @@ class SpiderBase {
 
   makeParams(content, type) {
     let params = [
-      conf.budejie.name,
+      this.name,
       this.getOriginalId(content),
       content.content,
       content.imageSrc || null,
       content.time,
       content.up,
       content.down,
-      conf.budejie.originalUrlPrefix + content.href,
+      this.originalUrlPrefix + content.href,
       type,
     ]
     return params
   }
 
   getOriginalId(content) {
-    return conf.budejie.name + '_' + content.id
+    return this.name + '_' + content.id
   }
 }
 
