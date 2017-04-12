@@ -58,7 +58,7 @@ class SpiderBase {
       content.time,
       content.up,
       content.down,
-      this.originalUrlPrefix + content.href,
+      content.originalPage,
       type,
     ]
     return params

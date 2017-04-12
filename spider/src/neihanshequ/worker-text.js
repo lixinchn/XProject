@@ -28,12 +28,14 @@ class Worker extends workerBase.WorkerBase {
         let down = parseInt(group.bury_count)
         let onlineTime = data.online_time
         let time = moment(onlineTime * 1000).format('YYYY-MM-DD HH:mm:ss')
+        let originalPage = group.share_url
         contents.push({
           id: id,
           content: content,
           up: up,
           down: down,
           time: time,
+          originalPage: originalPage,
         })
       })
 
