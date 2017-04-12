@@ -6,11 +6,11 @@ const conf = require('../conf')
 
 
 class WorkerBase extends spiderBase.SpiderBase {
-  constructor(page) {
+  constructor() {
     super()
     this.originalUrlPrefix = conf.budejie.originalUrlPrefix
     this.name = conf.budejie.name
-    this.page = page
+    this.page = 1
     this.options = {
       transform: body => {
         return cheerio.load(body, {
@@ -50,7 +50,7 @@ class WorkerBase extends spiderBase.SpiderBase {
   }
 
   getSrc() {
-    return this.src + this.page
+    return this.src + (this.page++)
   }
 
   beginCapture(options, onFinish, onError) {

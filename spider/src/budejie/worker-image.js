@@ -5,8 +5,8 @@ const conf = require('../conf')
 
 
 class Worker extends workerBase.WorkerBase {
-  constructor(page) {
-    super(page)
+  constructor() {
+    super()
     this.src = 'http://www.budejie.com/pic/'
     this.type = conf.contentType.contentAndPic
   }

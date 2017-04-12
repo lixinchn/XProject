@@ -9,8 +9,8 @@ const kuaikanshipin = require('./src/kuaikanshipin/manager')
 // budejieManager.getImageContents()
 // budejieManager.getVideoContents()
 
-neihanshequManager = new neihanshequ.Manager()
-neihanshequManager.getTextContents()
+// neihanshequManager = new neihanshequ.Manager()
+// neihanshequManager.getTextContents()
 
 // budejie.getImageContents()
 // budejie.getVideoContents()

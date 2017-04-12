@@ -24,9 +24,8 @@ class Manager {
   }
 
   getContents(workerNamespace) {
-    let page = 1
+    const worker = new workerNamespace.Worker()
     const timer = new Timer.Timer(conf.floorTime, conf.ceilTime, () => {
-      const worker = new workerNamespace.Worker(page++)
       worker.begin(worker.getSrc(), (contents) => {
         worker.saveContent(contents, worker.type, worker.getSrc()).then(errorCount => {
           timer.makeIdle() // 一次抓取和存储结束，释放 timer
