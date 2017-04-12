@@ -6,15 +6,15 @@ const conf = require('../conf')
 class SpiderBase {
   constructor() {}
 
-  async saveContent(contents) {
+  async saveContent(contents, type, src) {
     let pool = db.getPool()
     let errorCount = 0
 
     for (let content of contents) {
-      let params = this.makeParams(content)
+      let params = this.makeParams(content, type)
       let originalId = this.getOriginalId(content)
       try {
-        let results = await this.insert(pool, params, originalId)
+        let results = await this.insert(pool, params, originalId, src)
         console.log(results)
       } catch(e) {
         console.log(e)
@@ -25,14 +25,14 @@ class SpiderBase {
     return errorCount
   }
 
-  insert(pool, params, originalId) {
+  insert(pool, params, originalId, src) {
     return new Promise((resolve, reject) => {
       pool.query('SELECT id FROM x_t_joke WHERE original_id = ?;', originalId,
         (error, results, fields) => {
           if (error)
             reject(error)
           if (results.length > 0) // 说明抓取的是重复的内容，直接返回
-            reject('重复的内容, originalId: ' + originalId)
+            reject('重复的内容, src: ' + src + ', originalId: ' + originalId)
 
           pool.query('INSERT INTO x_t_joke(source, original_id, text_content, image_src, \
           original_date, up, down, original_page, type, ctime) VALUES(?, ?, ?, ?, ?, \
@@ -46,7 +46,7 @@ class SpiderBase {
     })
   }
 
-  makeParams(content) {
+  makeParams(content, type) {
     let params = [
       conf.budejie.name,
       this.getOriginalId(content),
@@ -56,7 +56,7 @@ class SpiderBase {
       content.up,
       content.down,
       conf.budejie.originalUrlPrefix + content.href,
-      conf.contentType.content,
+      type,
     ]
     return params
   }

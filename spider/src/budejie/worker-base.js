@@ -1,4 +1,6 @@
 'use strict'
+const rp = require('request-promise')
+const cheerio = require('cheerio')
 const spiderBase = require('../base/spider-base')
 
 
@@ -6,6 +8,13 @@ class WorkerBase extends spiderBase.SpiderBase {
   constructor(page) {
     super()
     this.page = page
+    this.options = {
+      transform: body => {
+        return cheerio.load(body, {
+          decodeEntities: false,
+        })
+      },
+    }
   }
 
   getId(href) {
@@ -41,17 +50,9 @@ class WorkerBase extends spiderBase.SpiderBase {
     return this.src + this.page
   }
 
-  /*
-
-  const getVideoSrc = (() => {
-    let page = 1
-    let src = 'http://m.budejie.com/video/'
-
-    return () => {
-      return src + (page++)
-    }
-  })()
-  */
+  beginCapture(options, onFinish, onError) {
+    rp(this.options).then(onFinish).catch(onError)
+  }
 }
 
 exports.WorkerBase = WorkerBase

@@ -1,21 +1,14 @@
 'use strict'
 
-const rp = require('request-promise')
-const cheerio = require('cheerio')
 const workerBase = require('./worker-base')
+const conf = require('../conf')
 
 
 class Worker extends workerBase.WorkerBase {
   constructor(page) {
     super(page)
     this.src = 'http://www.budejie.com/text/'
-    this.options = {
-      transform: body => {
-        return cheerio.load(body, {
-          decodeEntities: false,
-        })
-      },
-    }
+    this.type = conf.contentType.content
   }
 
   getHref($, elem) {
@@ -27,32 +20,35 @@ class Worker extends workerBase.WorkerBase {
   }
 
   begin(uri, callback) {
-    this.options.uri = uri
-    rp(this.options)
-      .then($ => {
-        let contents = []
-        $('.j-r-list-c-desc').each((index, elem) => {
-          let href = this.getHref($, elem)
-          let id = this.getId(href)
-          let content = this.getContent($, elem)
-          let time = this.getTime($, elem)
-          let up = this.getUp($, elem)
-          let down = this.getDown($, elem)
-          contents.push({
-            href: href,
-            id: id,
-            content: content,
-            time: time,
-            up: up,
-            down: down,
-          })
+    const onFinish = $ => {
+      let contents = []
+      $('.j-r-list-c-desc').each((index, elem) => {
+        let href = this.getHref($, elem)
+        let id = this.getId(href)
+        let content = this.getContent($, elem)
+        let time = this.getTime($, elem)
+        let up = this.getUp($, elem)
+        let down = this.getDown($, elem)
+        contents.push({
+          href: href,
+          id: id,
+          content: content,
+          time: time,
+          up: up,
+          down: down,
         })
+      })
 
-        callback(contents)
-      })
-      .catch(err => {
-        console.log(err)
-      })
+      callback(contents)
+    }
+
+    const onError = err => {
+      console.log(err)
+      process.exit()
+    }
+
+    this.options.uri = uri
+    this.beginCapture(this.options, onFinish, onError)
   }
 }
 

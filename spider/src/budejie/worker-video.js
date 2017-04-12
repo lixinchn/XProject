@@ -1,60 +1,60 @@
-const rp = require('request-promise')
-const cheerio = require('cheerio')
+'use strict'
+
 const workerBase = require('./worker-base')
-const options = {
-  transform: body => {
-    return cheerio.load(body, {
-      decodeEntities: false,
-    })
-  },
-}
+const conf = require('../conf')
 
-function getContent($, elem) {
-  let content = $(elem).find('section.ui-row-flex').find('p').html()
-  content = content.trim('\n')
-  content = content.trim()
-  return content
-}
 
-function getId($, elem) {
-  return $(elem).find('.j-v-c').find('video').attr('data-id')
-}
+class Worker extends workerBase.WorkerBase {
+  constructor(page) {
+    super(page)
+    this.src = 'http://m.budejie.com/video/'
+    this.type = conf.contentType.contentAndPic
+  }
 
-function getImageSrc($, elem) {
-  return $(elem).find('.j-v-c').find('video').attr('poster')
-}
+  getContent($, elem) {
+    let content = $(elem).find('section.ui-row-flex').find('p').html()
+    content = content.trim('\n')
+    content = content.trim()
+    return content
+  }
 
-function getVideoSrc($, elem) {
-  return $(elem).find('.j-v-c').find('source').attr('src')
-}
+  getId($, elem) {
+    return $(elem).find('.j-v-c').find('video').attr('data-id')
+  }
 
-function getTime($, elem) {
-  return $(elem).find('.ui-list-info').find('p').html()
-}
+  getImageSrc($, elem) {
+    return $(elem).find('.j-v-c').find('video').attr('poster')
+  }
 
-function getUp($, elem) {
-  return parseInt($(elem).find('.tool-praise').find('span').html())
-}
+  getVideoSrc($, elem) {
+    return $(elem).find('.j-v-c').find('source').attr('src')
+  }
 
-function getDown($, elem) {
-  return parseInt($(elem).find('.tool-cai').find('span').html())
-}
+  getTime($, elem) {
+    return $(elem).find('.ui-list-info').find('p').html()
+  }
 
-function begin(uri, callback) {
-  options.uri = uri
-  rp(options)
-    .then($ => {
+  getUp($, elem) {
+    return parseInt($(elem).find('.tool-praise').find('span').html())
+  }
+
+  getDown($, elem) {
+    return parseInt($(elem).find('.tool-cai').find('span').html())
+  }
+
+  begin(uri, callback) {
+    const onFinish = $ => {
       let contents = []
       $('.ui-border-b').each((index, elem) => {
-        let id = getId($, elem)
+        let id = this.getId($, elem)
         if (!id)
           return // ad
-        let content = getContent($, elem)
-        let imageSrc = getImageSrc($, elem)
-        let videoSrc = getVideoSrc($, elem)
-        let time = getTime($, elem)
-        let up = getUp($, elem)
-        let down = getDown($, elem)
+        let content = this.getContent($, elem)
+        let imageSrc = this.getImageSrc($, elem)
+        let videoSrc = this.getVideoSrc($, elem)
+        let time = this.getTime($, elem)
+        let up = this.getUp($, elem)
+        let down = this.getDown($, elem)
         contents.push({
           id: id,
           content: content,
@@ -67,13 +67,16 @@ function begin(uri, callback) {
       })
 
       callback(contents)
-    })
-    .catch(err => {
+    }
+
+    const onError = err => {
       console.log(err)
-    })
+      process.exit()
+    }
+
+    this.options.uri = uri
+    this.beginCapture(this.options, onFinish, onError)
+  }
 }
 
-module.exports = {
-  begin: begin,
-  getSrc: workerBase.getVideoSrc,
-}
+exports.Worker = Worker
