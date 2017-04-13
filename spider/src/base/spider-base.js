@@ -5,12 +5,12 @@ const db = require('../db')
 class SpiderBase {
   constructor() {}
 
-  async saveContent(contents, type, src) {
+  async saveContent(contents, src) {
     let pool = db.getPool()
     let errorCount = 0
 
     for (let content of contents) {
-      let params = this.makeParams(content, type)
+      let params = this.makeParams(content)
       let originalId = this.getOriginalId(content)
       try {
         let results = await this.insert(pool, params, originalId, src)
@@ -49,7 +49,7 @@ class SpiderBase {
     })
   }
 
-  makeParams(content, type) {
+  makeParams(content) {
     let params = [
       this.name,
       this.getOriginalId(content),
@@ -59,7 +59,7 @@ class SpiderBase {
       content.up,
       content.down,
       content.originalPage,
-      type,
+      content.type,
     ]
     return params
   }

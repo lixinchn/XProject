@@ -29,7 +29,7 @@ class Manager {
     const timer = new Timer.Timer(conf.floorTime, conf.ceilTime, () => {
       worker.begin(worker.getSrc(), (minTime, contents) => {
         worker.setMinTime(minTime)
-        worker.saveContent(contents, worker.type, worker.getSrc()).then(errorCount => {
+        worker.saveContent(contents, worker.getSrc()).then(errorCount => {
           timer.makeIdle() // 一次抓取和存储结束，释放 timer
           // console.log(errorCount)
           if (errorCount > 10) {
@@ -44,52 +44,3 @@ class Manager {
 }
 
 exports.Manager = Manager
-
-
-
-/*
-function getTextContents() {
-  timer.everyRound(conf.floorTime, conf.ceilTime, () => {
-    const uri = neihanshequText.getSrc()
-    neihanshequText.begin(uri, (minTime, contents) => {
-      neihanshequText.setMaxTime(minTime)
-      console.log(contents)
-
-      // TODO: stop when there are no more to insert into DB
-    })
-  })
-}
-
-function getImageContents() {
-  timer.everyRound(conf.floorTime, conf.ceilTime, () => {
-    const uri = neihanshequImage.getSrc()
-    neihanshequImage.begin(uri, (maxTime, contents) => {
-      neihanshequImage.setMaxTime(maxTime)
-      console.log(contents)
-
-      // TODO: stop when there are no more to insert into DB
-    })
-  })
-}
-
-function getVideoContents() {
-  timer.everyRound(conf.floorTime, conf.ceilTime, () => {
-    const uri = neihanshequVideo.getSrc()
-    neihanshequVideo.begin(uri, (maxTime, contents) => {
-      neihanshequVideo.setMaxTime(maxTime)
-      console.log(contents)
-
-      // TODO: stop when there are no more to insert into DB
-    })
-  })
-}
-
-const stopController = {
-}
-
-module.exports = {
-  getTextContents: getTextContents,
-  getImageContents: getImageContents,
-  getVideoContents: getVideoContents,
-}
-*/

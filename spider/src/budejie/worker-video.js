@@ -8,7 +8,6 @@ class Worker extends workerBase.WorkerBase {
   constructor() {
     super()
     this.src = 'http://m.budejie.com/video/'
-    this.type = conf.contentType.contentAndPic
   }
 
   getContent($, elem) {
@@ -63,6 +62,7 @@ class Worker extends workerBase.WorkerBase {
           time: time,
           up: up,
           down: down,
+          type: conf.contentType.contentAndPic,
         })
       })
 

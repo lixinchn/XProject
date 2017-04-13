@@ -43,6 +43,7 @@ class Worker extends workerBase.WorkerBase {
           time: time,
           up: up,
           down: down,
+          type: content ? conf.contentType.contentAndPic : conf.contentType.pic,
         })
       })
       callback(contents)

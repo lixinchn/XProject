@@ -27,7 +27,7 @@ class Manager {
     const worker = new workerNamespace.Worker()
     const timer = new Timer.Timer(conf.floorTime, conf.ceilTime, () => {
       worker.begin(worker.getSrc(), (contents) => {
-        worker.saveContent(contents, worker.type, worker.getSrc()).then(errorCount => {
+        worker.saveContent(contents, worker.getSrc()).then(errorCount => {
           timer.makeIdle() // 一次抓取和存储结束，释放 timer
           // console.log(errorCount)
           if (errorCount > 1) {

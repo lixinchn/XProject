@@ -8,7 +8,6 @@ class Worker extends workerBase.WorkerBase {
   constructor() {
     super()
     this.src = 'http://www.budejie.com/text/'
-    this.type = conf.contentType.content
   }
 
   getHref($, elem) {
@@ -37,6 +36,7 @@ class Worker extends workerBase.WorkerBase {
           time: time,
           up: up,
           down: down,
+          type: conf.contentType.content,
         })
       })
 
