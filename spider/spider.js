@@ -4,30 +4,26 @@ const sogou = require('./src/sogou/manager')
 const kuaikanshipin = require('./src/kuaikanshipin/manager')
 
 
-// budejieManager = new budejie.Manager()
-// budejieManager.getTextContents()
-// budejieManager.getImageContents()
-// budejieManager.getVideoContents()
+let namespace = process.argv[2]
+let type = process.argv[3]
+let manager = null
 
-// neihanshequManager = new neihanshequ.Manager()
-// neihanshequManager.getTextContents()
-// neihanshequManager.getImageContents()
-// neihanshequManager.getVideoContents()
+if (namespace === 'budejie')
+  manager = new budejie.Manager()
+else if (namespace === 'neihanshequ')
+  manager = new neihanshequ.Manager()
+else if (namespace === 'sogou')
+  manager = new sogou.Manager()
+else if (namespace === 'kuaikanshipin')
+  manager = new kuaikanshipin.Manager()
 
-// sogouManager = new sogou.Manager()
-// sogouManager.getImageContents()
-// sogouManager.getGifContents()
-// sogouManager.getVideoContents()
-
-kuaikanshipinManager = new kuaikanshipin.Manager()
-kuaikanshipinManager.getVideoContents()
-
-// budejie.getImageContents()
-// budejie.getVideoContents()
-// neihanshequ.getTextContents()
-// neihanshequ.getImageContents()
-// neihanshequ.getVideoContents()
-// sogou.getImageContents()
-// sogou.getGifContents()
-// sogou.getVideoContents()
-// kuaikanshipin.getVideoContents()
+if (manager) {
+  if (type === 'text')
+    manager.getTextContents()
+  else if (type === 'image')
+    manager.getImageContents()
+  else if (type === 'video')
+    manager.getVideoContents()
+  else if (type === 'gif')
+    manager.getGifContents()
+}
