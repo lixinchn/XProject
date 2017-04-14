@@ -52,8 +52,10 @@ class Worker extends workerBase.WorkerBase {
         let imageSrc = this.getImageSrc($, elem)
         let videoSrc = this.getVideoSrc($, elem)
         let time = this.getTime($, elem)
-        let up = this.getUp($, elem)
-        let down = this.getDown($, elem)
+        // let up = this.getUp($, elem)
+        // let down = this.getDown($, elem)
+        let up = this.getStandardUp()
+        let down = this.getStandardDown()
         contents.push({
           id: id,
           content: content,

@@ -23,8 +23,10 @@ class Worker extends workerBase.WorkerBase {
         let group = data.group
         let content = group.content
         let id = group.id
-        let up = parseInt(group.digg_count)
-        let down = parseInt(group.bury_count)
+        // let up = parseInt(group.digg_count)
+        // let down = parseInt(group.bury_count)
+        let up = this.getStandardUp()
+        let down = this.getStandardDown()
         let onlineTime = data.online_time
         let time = moment(onlineTime * 1000).format('YYYY-MM-DD HH:mm:ss')
         let originalPage = group.share_url

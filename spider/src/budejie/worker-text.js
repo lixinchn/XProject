@@ -27,8 +27,10 @@ class Worker extends workerBase.WorkerBase {
         let id = this.getId(href)
         let content = this.getContent($, elem)
         let time = this.getTime($, elem)
-        let up = this.getUp($, elem)
-        let down = this.getDown($, elem)
+        // let up = this.getUp($, elem)
+        // let down = this.getDown($, elem)
+        let up = this.getStandardUp()
+        let down = this.getStandardDown()
         contents.push({
           originalPage: originalPage,
           id: id,
