@@ -19,6 +19,9 @@ const kuaikanshipin = require('./src/kuaikanshipin/manager')
 // sogouManager.getGifContents()
 // sogouManager.getVideoContents()
 
+kuaikanshipinManager = new kuaikanshipin.Manager()
+kuaikanshipinManager.getVideoContents()
+
 // budejie.getImageContents()
 // budejie.getVideoContents()
 // neihanshequ.getTextContents()

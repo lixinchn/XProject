@@ -1,24 +1,18 @@
-const rp = require('request-promise')
-const cheerio = require('cheerio')
+'use strict'
+
 const moment = require('moment')
 const workerBase = require('./worker-base')
 const conf = require('../conf')
 
 
-const options = {
-  json: true,
-  headers: {
-    'User-Agent': conf.ua,
-    'Host': conf.kuaikanshipin.host,
-  },
-  resolveWithFullResponse: true,
-}
+class Worker extends workerBase.WorkerBase {
+  constructor() {
+    super()
+    this.src = 'http://api.winapp111.com/api/api_open.php?'
+  }
 
-function begin(uri, callback) {
-  options.uri = uri
-  rp(options)
-    .then(response => {
-      // console.log(response)
+  begin(uri, callback) {
+    const onFinish = response => {
       // get contents
       let contents = []
       let maxTime = response.body.info.maxtime
@@ -45,14 +39,20 @@ function begin(uri, callback) {
       })
 
       callback(maxTime, contents)
-    })
-    .catch(err => {
+    }
+
+    const onError = err => {
       console.log(err)
-    })
+      process.exit()
+    }
+
+    this.options.uri = uri
+    this.beginCapture(this.options, onFinish, onError)
+  }
+
+  getImageSrc(imageList) {
+    return JSON.stringify(imageList)
+  }
 }
 
-module.exports = {
-  begin: begin,
-  getSrc: workerBase.getVideoSrc,
-  setMaxtime: workerBase.setVideoMaxtime,
-}
+exports.Worker = Worker
