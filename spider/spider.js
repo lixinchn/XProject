@@ -14,8 +14,10 @@ const kuaikanshipin = require('./src/kuaikanshipin/manager')
 // neihanshequManager.getImageContents()
 // neihanshequManager.getVideoContents()
 
-sogouManager = new sogou.Manager()
-sogouManager.getImageContents()
+// sogouManager = new sogou.Manager()
+// sogouManager.getImageContents()
+// sogouManager.getGifContents()
+// sogouManager.getVideoContents()
 
 // budejie.getImageContents()
 // budejie.getVideoContents()

@@ -46,7 +46,11 @@ class WorkerBase extends spiderBase.SpiderBase {
   }
 
   getSrc() {
-    let realSrc = this.src + url.joinParams(this.requestParams)
+    let realSrc = ''
+    if (!this.newParams)
+      realSrc = this.src + url.joinParams(this.requestParams)
+    else
+      realSrc = this.src + url.joinParams(Object.assign({}, this.requestParams, this.newParams))
     return !this.lastIndex ? realSrc : realSrc + '&lastindex=' + this.lastIndex
   }
 
@@ -56,64 +60,3 @@ class WorkerBase extends spiderBase.SpiderBase {
 }
 
 exports.WorkerBase = WorkerBase
-
-/*
-const this = (() => {
-  let src = 'https://shida.epro.sogou.com/discover_agent/getlist?'
-  let lastIndex = 0
-
-  return {
-    getImageSrc: () => {
-      let realSrc = src + url.joinParams(requestParams)
-      return !imgSrc.lastIndex ? realSrc : realSrc + '&lastindex=' + imgSrc.lastIndex
-    },
-
-    setLastIndex: lastIndex => {
-      imgSrc.lastIndex = lastIndex
-    }
-  }
-})()
-
-const gifSrc = (() => {
-  let src = 'https://shida.epro.sogou.com/discover_agent/getlist?'
-  let lastIndex = 0
-
-  return {
-    getGifSrc: () => {
-      let newParams = { b: 'GIF' }
-      let realSrc = src + url.joinParams(Object.assign({}, requestParams, newParams))
-      return !gifSrc.lastIndex ? realSrc : realSrc + '&lastindex=' + gifSrc.lastIndex
-    },
-
-    setLastIndex: lastIndex => {
-      gifSrc.lastIndex = lastIndex
-    }
-  }
-})()
-
-const videoSrc = (() => {
-  let src = 'https://shida.epro.sogou.com/discover_agent/getlist?'
-  let lastIndex = 0
-
-  return {
-    getVideoSrc: () => {
-      let newParams = { b: '%E5%A4%A7%E5%9B%BE%E8%A7%86%E9%A2%91' }
-      let realSrc = src + url.joinParams(Object.assign({}, requestParams, newParams))
-      return !videoSrc.lastIndex ? realSrc : realSrc + '&lastindex=' + videoSrc.lastIndex
-    },
-
-    setVideoLastIndex: lastIndex => {
-      videoSrc.lastIndex = lastIndex
-    }
-  }
-})()
-
-module.exports = {
-  getImageSrc: imgSrc.getImageSrc,
-  setImageLastIndex: imgSrc.setLastIndex,
-  getGifSrc: gifSrc.getGifSrc,
-  setGifLastIndex: gifSrc.setLastIndex,
-  getVideoSrc: videoSrc.getVideoSrc,
-  setVideoLastIndex: videoSrc.setVideoLastIndex,
-}
-*/
