@@ -67,6 +67,19 @@ class SpiderBase {
   getOriginalId(content) {
     return this.name + '_' + content.id
   }
+
+  getStandardUp() {
+    let minUp = 1000
+    let maxUp = 10000
+
+    return Math.ceil((Math.random() * (maxUp - minUp)) + minUp)
+  }
+
+  getStandardDown() {
+    let minDown = 10
+    let maxDown = 100
+    return Math.ceil((Math.random() * (maxDown - minDown)) + minDown)
+  }
 }
 
 exports.SpiderBase = SpiderBase
