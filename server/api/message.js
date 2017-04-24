@@ -37,4 +37,5 @@ function messageAlert(req, res) {
 
 module.exports = {
   message: message,
+  messageAlert: messageAlert,
 }
