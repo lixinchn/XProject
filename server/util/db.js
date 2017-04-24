@@ -26,18 +26,10 @@ let worker = {
         console.log(err)
     })
   },
-
-  generateSql: {
-    getById: (column, tableName, idColumn) => {
-      let select = column.join(',')
-      return 'SELECT ' + column + ' FROM ' + tableName + ' WHERE ' + idColumn + ' = ?;'
-    },
-  },
 }
 
 module.exports = {
   getPool: worker.getPool,
   endPool: worker.endPool,
-  generateSql: worker.generateSql,
 }
 
