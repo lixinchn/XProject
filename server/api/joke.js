@@ -19,6 +19,7 @@ function joke(req, res) {
 
   const manager = new jokeManager.JokeManager()
   manager.get(maxId, minId).then(results => {
+    console.log(results)
     response.response(null, results, res)
   })
 }
