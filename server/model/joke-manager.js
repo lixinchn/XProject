@@ -6,8 +6,6 @@ const conf = require('../util/conf')
 
 class JokeManager {
   constructor() {
-    // this.column = ['id', 'source', 'original_id', 'text_content', 'image_src', 'original_date',
-    //               'up', 'down', 'original_page', 'type', 'ctime']
     this.column = {
       id: 'id',
       text_content: 'content',
@@ -25,27 +23,33 @@ class JokeManager {
 
   async get(maxId, minId) {
     // cache
-    let results = await this.getFromCache()
-    // results = JSON.parse(results)
+    let results = await this.getFromCache(conf.redisKey._JOKE_HOT_)
 
     // db
-    if (!results)
-      results = await this.getFromDb()
+    if (!results) {
+      let sql = this.generateLatest1000Sql()
+      results = await this.getFromDb(sql, null)
 
-    if (!results)
-      return ''
+      // save to cache
+      if (results)
+        await this.saveToCache(conf.redisKey._JOKE_HOT_, results)
+    }
 
-    // save to cache
-    let saveSucc = await this.saveToCache(results)
 
-    let returnContents = this.filter(results, maxId, minId)
+    // filter
+    let returnContents = null
+    if (results)
+      returnContents = this.filter(results, maxId, minId)
+
+    if (!returnContents)
+        returnContents = await Promise.all(this.getContentsLongAgo(minId))
     return returnContents
   }
 
-  getFromCache(maxId, minId) {
+  getFromCache(cacheKey) {
     return new Promise((resolve, reject) => {
       let client = redis.getClient()
-      client.get(conf.redisKey._JOKE_HOT_, (err, reply) => {
+      client.get(cacheKey, (err, reply) => {
         if (err) {
           reject(err)
           return
@@ -56,11 +60,11 @@ class JokeManager {
     })
   }
 
-  saveToCache(results) {
+  saveToCache(cacheKey, results) {
     let str = JSON.stringify(results)
     return new Promise((resolve, reject) => {
       let client = redis.getClient()
-      client.setex(conf.redisKey._JOKE_HOT_, conf.ttl.FIVE_MINS, str, (err, reply) => {
+      client.setex(cacheKey, conf.ttl.FIVE_MINS, str, (err, reply) => {
         if (err) {
           reject(err)
           return
@@ -70,11 +74,10 @@ class JokeManager {
     })
   }
 
-  getFromDb() {
-    let sql = this.generateLatest1000Sql()
+  getFromDb(sql, params) {
     return new Promise((resolve, reject) => {
       let pool = db.getPool()
-      pool.query(sql, (error, results, fields) => {
+      pool.query(sql, params, (error, results, fields) => {
         if (error) {
           reject(error)
           return
@@ -101,8 +104,6 @@ class JokeManager {
         continue
       }
 
-      console.log(result.id)
-      console.log(minId)
       if (minId && result.id < minId) {
         contents.push(result)
         continue
@@ -111,13 +112,31 @@ class JokeManager {
     return contents
   }
 
+  async getContentsLongAgo(minId) {
+    // cache
+    let results = await this.getFromCache(this.generateLongAgoCacheKey(minId))
+    if (results)
+      return results
+
+    // db
+    let sql = this.generateSelect() + this.generateWhere(minId, 'min') + this.generateOrderBy()
+                + this.generateLimit(this.pageCount)
+    results = await this.getFromDb(sql, minId)
+    if (!results)
+      return ''
+
+    // save to cache
+    let saveSucc = await this.saveToCache(this.generateLongAgoCacheKey(minId), results)
+    return results
+  }
+
+  generateLongAgoCacheKey(minId) {
+    return conf.redisKey._JOKE_HOT_LONG_AGO_ + minId
+  }
+
   generateLatest1000Sql() {
     return this.generateSelect() + this.generateOrderBy() + this.generateLimit(1000)
   }
-
-  // generateSqlById(id, maxOrMin, limit) {
-  //   return this.generateSelect() + this.generateWhere(id, maxOrMin) + this.generateOrderBy() + this.generateLimit(limit)
-  // }
 
   generateSelect() {
     let column = []
@@ -129,11 +148,11 @@ class JokeManager {
     return 'SELECT ' + column + ' FROM ' + this.tableName
   }
 
-  // generateWhere(id, maxOrMin) {
-  //   if (!id)
-  //       return ''
-  //   return ' WHERE ' + this.idColumn + (maxOrMin === 'max' ? ' > ? ' : ' < ? ')
-  // }
+  generateWhere(id, maxOrMin) {
+    if (!id)
+        return ''
+    return ' WHERE ' + this.idColumn + (maxOrMin === 'max' ? ' > ? ' : ' < ? ')
+  }
 
   generateOrderBy() {
     return ' ORDER BY ' + this.idColumn + ' DESC '

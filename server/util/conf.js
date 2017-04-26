@@ -1,5 +1,6 @@
 let redisKey = {
   _JOKE_HOT_: '_JOKE_HOT_',
+  _JOKE_HOT_LONG_AGO_: '_JOKE_HOT_LONG_AGO_',
 }
 
 let ttl = {
