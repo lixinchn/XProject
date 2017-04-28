@@ -1,4 +1,5 @@
 'use strict'
+const moment = require('moment')
 const db = require('../db')
 
 
@@ -33,7 +34,7 @@ class SpiderBase {
             return
           }
           if (results.length > 0) { // 说明抓取的是重复的内容，直接返回
-            reject('重复的内容, src: ' + src + ', originalId: ' + originalId)
+            reject('time: ' + moment().format('YYYY-MM-DD HH:mm:ss') + ', 重复的内容, src: ' + src + ', originalId: ' + originalId)
             return
           }
 
