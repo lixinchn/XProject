@@ -6,16 +6,16 @@ const jokeManager = require('../model/joke-manager')
 function joke(req, res) {
   const uid = req.query.uid
   const type = req.query.type || 'hot' // 'hot' or 'new'
-  const maxId = req.query.maxid
-  const minId = req.query.minid
+  const maxId = req.query.maxid || 0
+  const minId = req.query.minid || 0
 
   if (error.paramErrorHandler([uid, type], res))
     return
 
-  if ((maxId === undefined || maxId === null) && (minId === undefined || minId === null)) {
-    error.paramErrorResponse(res)
-    return
-  }
+  // if ((maxId === undefined || maxId === null) && (minId === undefined || minId === null)) {
+  //   error.paramErrorResponse(res)
+  //   return
+  // }
 
   const manager = new jokeManager.JokeManager()
   manager.get(maxId, minId).then(results => {
