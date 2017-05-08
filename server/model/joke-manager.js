@@ -41,8 +41,10 @@ class JokeManager {
     if (results)
       returnContents = this.filter(results, maxId, minId)
 
-    if (!returnContents)
-        returnContents = await Promise.all(this.getContentsLongAgo(minId))
+    if (!returnContents || returnContents.length === 0)
+        returnContents = await Promise.resolve(this.getContentsLongAgo(minId)).catch(err => {
+          console.log(err)
+        })
     return returnContents
   }
 
