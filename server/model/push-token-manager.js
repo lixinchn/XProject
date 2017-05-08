@@ -14,7 +14,6 @@ class PushTokenManager {
       uid: 'uid',
     }
     this.tableName = 'x_push_token'
-    this.idColumn = 'id'
   }
 
   async update(uid, deviceId, deviceToken, osType) {
