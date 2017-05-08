@@ -20,6 +20,14 @@ function paramErrorHandler(params, res) {
   return false
 }
 
+function paramOsErrorHandler(os, res) {
+  if (os !== 'android' && os !== 'ios') {
+    paramErrorResponse(res)
+    return true
+  }
+  return false
+}
+
 function paramErrorResponse(res) {
   response.response(errorInfo.errorParam.code, errorInfo.errorParam.info, res)
 }
@@ -27,4 +35,5 @@ function paramErrorResponse(res) {
 module.exports = {
   paramErrorHandler: paramErrorHandler,
   paramErrorResponse: paramErrorResponse,
+  paramOsErrorHandler: paramOsErrorHandler,
 }

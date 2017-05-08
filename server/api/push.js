@@ -1,20 +1,24 @@
 const error = require('../util/error')
 const response = require('../util/response')
+const pushManager = require('../model/push-token-manager')
 
 
 function pushToken(req, res) {
-  const token = req.query.t
+  const deviceToken = req.query.device_token
   const deviceId = req.query.device_id
-  const uid = req.query.uid || deviceId // default set to deviceId
+  const uid = req.query.uid
+  const osType = req.query.os
 
-  if (error.paramErrorHandler([token, deviceId, uid], res))
+  if (error.paramErrorHandler([deviceToken, deviceId, osType], res))
     return
 
-  // TODO
-  console.log(token)
-  console.log(deviceId)
+  if (error.paramOsErrorHandler(osType, res))
+    return
 
-  response.response(null, '1111', res)
+  const manager = new pushManager.PushTokenManager()
+  manager.update(uid, deviceId, deviceToken, osType).then(results => {
+    response.response(null, true, res)
+  })
 }
 
 module.exports = {
