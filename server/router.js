@@ -1,6 +1,7 @@
 const push = require('./api/push')
 const message = require('./api/message')
 const joke = require('./api/joke')
+const init = require('./api/init')
 
 
 const routers = [
@@ -8,6 +9,7 @@ const routers = [
   { 'method': 'GET', 'path': '/msg', 'handler': message.message },
   { 'method': 'GET', 'path': '/joke', 'handler': joke.joke },
   { 'method': 'GET', 'path': '/msg_alert', 'handler': message.messageAlert },
+  { 'method': 'GET', 'path': '/init', 'handler': init.init },
 ]
 
 module.exports = {

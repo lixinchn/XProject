@@ -4,7 +4,7 @@ const redis = require('../util/redis')
 const conf = require('../util/conf')
 
 
-class PushTokenManager {
+class PushToken {
   constructor() {
     this.column = {
       device_id: 'deviceId',
@@ -54,4 +54,4 @@ class PushTokenManager {
   }
 }
 
-exports.PushTokenManager = PushTokenManager
+exports.PushToken = PushToken

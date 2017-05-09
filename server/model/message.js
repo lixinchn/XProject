@@ -4,7 +4,7 @@ const redis = require('../util/redis')
 const conf = require('../util/conf')
 
 
-class MessageManager {
+class Message {
   constructor() {
     this.column = {
       id: 'id',
@@ -156,4 +156,4 @@ class MessageManager {
   }
 }
 
-exports.MessageManager = MessageManager
+exports.Message = Message

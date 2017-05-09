@@ -3,6 +3,7 @@ let redisKey = {
   _JOKE_HOT_LONG_AGO_: '_JOKE_HOT_LONG_AGO_',
   _MSG_PUBLIC_: '_MSG_PUBLIC_',
   _MSG_PUBLIC_LONG_AGO_: '_MSG_PUBLIC_LONG_AGO_',
+  _APP_VERSION_: '_APP_VERSION_',
 }
 
 let ttl = {

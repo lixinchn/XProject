@@ -1,6 +1,6 @@
 const error = require('../util/error')
 const response = require('../util/response')
-const messageManager = require('../model/message-manager')
+const Message = require('../model/message')
 
 
 function message(req, res) {
@@ -11,8 +11,8 @@ function message(req, res) {
   if (error.paramErrorHandler([deviceId, uid, minId], res))
     return
 
-  const manager = new messageManager.MessageManager()
-  manager.get(uid, deviceId, minId).then(results => {
+  const message = new Message.Message()
+  message.get(uid, deviceId, minId).then(results => {
     response.response(null, results, res)
   })
 }

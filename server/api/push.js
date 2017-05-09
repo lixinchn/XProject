@@ -1,6 +1,6 @@
 const error = require('../util/error')
 const response = require('../util/response')
-const pushManager = require('../model/push-token-manager')
+const Push = require('../model/push-token')
 
 
 function pushToken(req, res) {
@@ -15,8 +15,8 @@ function pushToken(req, res) {
   if (error.paramOsErrorHandler(osType, res))
     return
 
-  const manager = new pushManager.PushTokenManager()
-  manager.update(uid, deviceId, deviceToken, osType).then(results => {
+  const push = new Push.PushToken()
+  push.update(uid, deviceId, deviceToken, osType).then(results => {
     response.response(null, true, res)
   })
 }
