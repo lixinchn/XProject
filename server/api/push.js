@@ -3,7 +3,7 @@ const response = require('../util/response')
 const Push = require('../model/push-token')
 
 
-function pushToken(req, res) {
+async function pushToken(req, res) {
   const deviceToken = req.query.device_token
   const deviceId = req.query.device_id
   const uid = req.query.uid
@@ -16,9 +16,8 @@ function pushToken(req, res) {
     return
 
   const push = new Push.PushToken()
-  push.update(uid, deviceId, deviceToken, osType).then(results => {
-    response.response(null, true, res)
-  })
+  let results = await push.update(uid, deviceId, deviceToken, osType)
+  response.response(null, true, res)
 }
 
 module.exports = {

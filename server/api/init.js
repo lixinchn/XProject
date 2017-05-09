@@ -3,7 +3,7 @@ const response = require('../util/response')
 const Init = require('../model/init')
 
 
-function init(req, res) {
+async function init(req, res) {
   const uid = req.query.uid
   const deviceId = req.query.device_id
   const appVersion = req.query.app_version
@@ -14,9 +14,8 @@ function init(req, res) {
     return
 
   const init = new Init.Init()
-  init.do(uid, deviceId, appVersion, osType, maxMsgId).then(results => {
-    response.response(null, results, res)
-  })
+  let results = await init.do(uid, deviceId, appVersion, osType, maxMsgId)
+  response.response(null, results, res)
 }
 
 module.exports = {

@@ -3,7 +3,7 @@ const response = require('../util/response')
 const Joke = require('../model/joke')
 
 
-function joke(req, res) {
+async function joke(req, res) {
   const uid = req.query.uid
   const type = req.query.type || 'hot' // 'hot' or 'new'
   const maxId = req.query.maxid || 0
@@ -13,9 +13,8 @@ function joke(req, res) {
     return
 
   const joke = new Joke.Joke()
-  joke.get(maxId, minId).then(results => {
-    response.response(null, results, res)
-  })
+  let results = await joke.get(maxId, minId)
+  response.response(null, results, res)
 }
 
 module.exports = {
