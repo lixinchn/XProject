@@ -8,12 +8,13 @@ function init(req, res) {
   const deviceId = req.query.device_id
   const appVersion = req.query.app_version
   const osType = req.query.os
+  const maxMsgId = req.query.max_msg_id || 0
 
   if (error.paramErrorHandler([deviceId, appVersion, osType], res))
     return
 
   const init = new Init.Init()
-  init.do(uid, deviceId, appVersion, osType).then(results => {
+  init.do(uid, deviceId, appVersion, osType, maxMsgId).then(results => {
     response.response(null, results, res)
   })
 }

@@ -8,7 +8,6 @@ const routers = [
   { 'method': 'GET', 'path': '/push_token', 'handler': push.pushToken },
   { 'method': 'GET', 'path': '/msg', 'handler': message.message },
   { 'method': 'GET', 'path': '/joke', 'handler': joke.joke },
-  { 'method': 'GET', 'path': '/msg_alert', 'handler': message.messageAlert },
   { 'method': 'GET', 'path': '/init', 'handler': init.init },
 ]
 

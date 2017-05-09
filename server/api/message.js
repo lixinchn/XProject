@@ -17,24 +17,6 @@ function message(req, res) {
   })
 }
 
-function messageAlert(req, res) {
-  const deviceId = req.query.device_id
-  const minId = req.query.min_id
-  const uid = req.query.uid || deviceId
-
-  if (error.paramErrorHandler([deviceId, uid, minId], res))
-    return
-
-  // TODO
-  // TODO
-  console.log(deviceId)
-  console.log(uid)
-  console.log(minId)
-
-  response.response(null, '1111', res)
-}
-
 module.exports = {
   message: message,
-  messageAlert: messageAlert,
 }
