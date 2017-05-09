@@ -2,6 +2,7 @@
 const db = require('../util/db')
 const redis = require('../util/redis')
 const conf = require('../util/conf')
+const storage = require('../util/storage')
 
 
 class Joke {
@@ -23,18 +24,17 @@ class Joke {
 
   async get(maxId, minId) {
     // cache
-    let results = await this.getFromCache(conf.redisKey._JOKE_HOT_)
+    let results = await storage.getFromCache(conf.redisKey._JOKE_HOT_)
 
     // db
     if (!results) {
       let sql = this.generateLatest1000Sql()
-      results = await this.getFromDb(sql, null)
+      results = await storage.getFromDb(sql, null)
 
       // save to cache
       if (results)
-        await this.saveToCache(conf.redisKey._JOKE_HOT_, results)
+        await storage.saveToCache(conf.redisKey._JOKE_HOT_, JSON.stringify(results))
     }
-
 
     // filter
     let returnContents = null
@@ -46,48 +46,6 @@ class Joke {
           console.log(err)
         })
     return returnContents
-  }
-
-  getFromCache(cacheKey) {
-    return new Promise((resolve, reject) => {
-      let client = redis.getClient()
-      client.get(cacheKey, (err, reply) => {
-        if (err) {
-          reject(err)
-          return
-        }
-
-        resolve(JSON.parse(reply))
-      })
-    })
-  }
-
-  saveToCache(cacheKey, results) {
-    let str = JSON.stringify(results)
-    return new Promise((resolve, reject) => {
-      let client = redis.getClient()
-      client.setex(cacheKey, conf.ttl.FIVE_MINS, str, (err, reply) => {
-        if (err) {
-          reject(err)
-          return
-        }
-        resolve(reply)
-      })
-    })
-  }
-
-  getFromDb(sql, params) {
-    return new Promise((resolve, reject) => {
-      let pool = db.getPool()
-      pool.query(sql, params, (error, results, fields) => {
-        if (error) {
-          reject(error)
-          return
-        }
-
-        resolve(results)
-      })
-    })
   }
 
   filter(results, maxId, minId) {
@@ -116,19 +74,20 @@ class Joke {
 
   async getContentsLongAgo(minId) {
     // cache
-    let results = await this.getFromCache(this.generateLongAgoCacheKey(minId))
+    let results = await storage.getFromCache(this.generateLongAgoCacheKey(minId))
     if (results)
       return results
 
     // db
-    let sql = this.generateSelect() + this.generateWhere(minId, 'min') + this.generateOrderBy()
-                + this.generateLimit(this.pageCount)
-    results = await this.getFromDb(sql, minId)
+    let sql = storage.generateSelect(this.column, this.tableName) +
+              this.generateWhere(minId, 'min') + storage.generateOrderBy(this.idColumn) +
+              storage.generateLimit(this.pageCount)
+    results = await storage.getFromDb(sql, [minId])
     if (!results)
       return ''
 
     // save to cache
-    let saveSucc = await this.saveToCache(this.generateLongAgoCacheKey(minId), results)
+    let saveSucc = await storage.saveToCache(this.generateLongAgoCacheKey(minId), JSON.stringify(results))
     return results
   }
 
@@ -137,31 +96,14 @@ class Joke {
   }
 
   generateLatest1000Sql() {
-    return this.generateSelect() + this.generateOrderBy() + this.generateLimit(1000)
-  }
-
-  generateSelect() {
-    let column = []
-    Object.keys(this.column).forEach(key => {
-        column.push(key + ' AS ' + this.column[key])
-    })
-
-    column = column.join(',')
-    return 'SELECT ' + column + ' FROM ' + this.tableName
+    return storage.generateSelect(this.column, this.tableName) +
+            storage.generateOrderBy(this.idColumn) + storage.generateLimit(1000)
   }
 
   generateWhere(id, maxOrMin) {
     if (!id)
         return ''
     return ' WHERE ' + this.idColumn + (maxOrMin === 'max' ? ' > ? ' : ' < ? ')
-  }
-
-  generateOrderBy() {
-    return ' ORDER BY ' + this.idColumn + ' DESC '
-  }
-
-  generateLimit(limit) {
-    return ' LIMIT ' + limit
   }
 }
 
